@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-white">Courses</h1>
+        <p class="text-slate-400 mt-1">Manage course records</p>
+    </div>
+    <a href="{% url 'courses:create' %}" class="px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors font-medium">Add Course</a>
+</div>
+<div class="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-slate-800/80">
+                <tr>
+                    <th class="text-left py-4 px-6 text-slate-400 font-medium">ID</th>
+                    <th class="text-left py-4 px-6 text-slate-400 font-medium">Name</th>
+                    <th class="text-left py-4 px-6 text-slate-400 font-medium">Duration</th>
+                    <th class="text-left py-4 px-6 text-slate-400 font-medium">Fee</th>
+                    <th class="text-left py-4 px-6 text-slate-400 font-medium">Description</th>
+                    <th class="text-right py-4 px-6 text-slate-400 font-medium">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+                {% for c in courses %}
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="py-4 px-6 font-mono text-sm">{{ c.id }}</td>
+                    <td class="py-4 px-6">{{ c.name }}</td>
+                    <td class="py-4 px-6 text-slate-400">{{ c.duration }}</td>
+                    <td class="py-4 px-6">{{ c.fee }}</td>
+                    <td class="py-4 px-6 text-slate-400 max-w-xs truncate">{{ c.description|default:"—" }}</td>
+                    <td class="py-4 px-6 text-right">
+                        <a href="{% url 'courses:update' c.id %}" class="text-primary-400 hover:text-primary-300 mr-3">Edit</a>
+                        <form action="{% url 'courses:delete' c.id %}" method="post" class="inline" onsubmit="return confirm('Delete this course?');">
+                            {% csrf_token %}
+                            <button type="submit" class="text-red-400 hover:text-red-300">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="py-12 px-6 text-center text-slate-500">No courses found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

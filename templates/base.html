@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SRMS{% endblock %} | Student Result Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        slate: {
+                            850: '#172033',
+                            950: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen">
+    <div class="{% if user.is_authenticated %}flex min-h-screen{% endif %}">
+        {% if user.is_authenticated %}
+        <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col fixed h-full">
+            <div class="p-6 border-b border-slate-800">
+                <h1 class="text-xl font-semibold text-primary-400 tracking-tight">SRMS</h1>
+                <p class="text-xs text-slate-500 mt-0.5">Student Result Management</p>
+            </div>
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors {% if request.resolver_match.url_name == 'dashboard' %}bg-slate-800 text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    Dashboard
+                </a>
+                <a href="{% url 'students:list' %}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors {% if 'students' in request.path %}bg-slate-800 text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    Students
+                </a>
+                <a href="{% url 'courses:list' %}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors {% if 'courses' in request.path %}bg-slate-800 text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    Courses
+                </a>
+                <a href="{% url 'results:list' %}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors {% if 'results' in request.path %}bg-slate-800 text-white{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    Results
+                </a>
+            </nav>
+            <div class="p-4 border-t border-slate-800">
+                <span class="text-sm text-slate-500 block px-3">{{ user.username }}</span>
+                <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-3 py-2 mt-2 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-red-400 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Logout
+                </a>
+            </div>
+        </aside>
+        {% endif %}
+        <main class="{% if user.is_authenticated %}flex-1 ml-64 p-8{% else %}min-h-screen flex items-center justify-center p-4{% endif %}">
+            {% if messages %}
+            <div class="{% if user.is_authenticated %}mb-6 space-y-2{% else %}fixed top-4 right-4 z-50 space-y-2 max-w-md{% endif %}">
+                {% for message in messages %}
+                <div class="px-4 py-3 rounded-lg {% if message.tags == 'error' %}bg-red-500/20 text-red-400 border border-red-500/30{% elif message.tags == 'success' %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/30{% else %}bg-primary-500/20 text-primary-400 border border-primary-500/30{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>
